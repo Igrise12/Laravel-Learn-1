@@ -1,7 +1,12 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
+
+
+
+
 
 Route::get('/', function () {
     return view('home', ['title' => 'Home Page']);
@@ -14,23 +19,11 @@ Route::get('/about', function () {
 
 
 Route::get('/posts', function () {
-    return view('posts', ['title' => 'Blog Page', 'posts' => [
-        ['id' => 1, 'slug' => 'first-post', 'title' => 'First Post', 'author' => 'Alice', 'body' => 'This is the content of the first post.'],
-        ['id' => 2, 'slug' => 'second-post', 'title' => 'Second Post', 'author' => 'Bob', 'body' => 'This is the content of the second post.'],
-        ['id' => 3, 'slug' => 'third-post', 'title' => 'Third Post', 'author' => 'Charlie', 'body' => 'This is the content of the third post.'],
-    ]]);
+    return view('posts', ['title' => 'Blog Page','posts' => Post::all()]);
 });
 
 Route::get('/posts/{slug}', function ($slug){
-    $posts =[
-        ['id' => 1, 'slug' => 'first-post', 'title' => 'First Post', 'author' => 'Alice', 'body' => 'This is the content of the first post.'],
-        ['id' => 2, 'slug' => 'second-post', 'title' => 'Second Post', 'author' => 'Bob', 'body' => 'This is the content of the second post.'],
-        ['id' => 3, 'slug' => 'third-post', 'title' => 'Third Post', 'author' => 'Charlie', 'body' => 'This is the content of the third post.'],
-    ];
-
-    $post = Arr::first($posts, function($post) use ($slug) {
-        return $post['slug'] == $slug;
-    });
+    $post = Post::find($slug);
 
     return view('post', ['title' => $post['title'], 'post' => $post]);
 });
